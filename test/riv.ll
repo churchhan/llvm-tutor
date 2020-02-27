@@ -91,46 +91,46 @@ define i32 @main(i32, i8**) #0 {
 }
 
 ; CHECK: 'fez':
-; CHECK: BB 0                                        
-; CHECK: BB 9                                        
+; CHECK: BB %0
+; CHECK: BB %9
 ; CHECK:                   %4 = load i32, i32* %1, align 4
 ; CHECK:                   %5 = load i32, i32* %2, align 4
-; CHECK:                   %6 = add nsw i32 %4, %5     
+; CHECK:                   %6 = add nsw i32 %4, %5
 ; CHECK:                   %7 = load i32, i32* %1, align 4
-; CHECK:                   %8 = icmp ne i32 %7, 0      
-; CHECK: BB 10                                       
+; CHECK:                   %8 = icmp ne i32 %7, 0
+; CHECK: BB %10
 ; CHECK:                   %4 = load i32, i32* %1, align 4
 ; CHECK:                   %5 = load i32, i32* %2, align 4
-; CHECK:                   %6 = add nsw i32 %4, %5     
+; CHECK:                   %6 = add nsw i32 %4, %5
 ; CHECK:                   %7 = load i32, i32* %1, align 4
-; CHECK:                   %8 = icmp ne i32 %7, 0      
+; CHECK:                   %8 = icmp ne i32 %7, 0
 
 ; CHECK: 'foo':
-; CHECK: BB 1                                        
-; CHECK:                 i32 %0                        
+; CHECK: BB %1
+; CHECK:                 i32 %0
 
 ; CHECK: 'bar':
-; CHECK: BB 0                                        
-; CHECK: BB 5                                        
-; CHECK:                   %4 = call i32 @foo(i32 1)   
-; CHECK: BB 8                                        
+; CHECK: BB %0
+; CHECK: BB %5
+; CHECK:                   %4 = call i32 @foo(i32 1)
+; CHECK: BB %8
 ; CHECK:                   %6 = load i32, i32* %2, align 4
-; CHECK:                   %7 = icmp slt i32 %6, 10    
-; CHECK:                   %4 = call i32 @foo(i32 1)   
-; CHECK: BB 13                                       
+; CHECK:                   %7 = icmp slt i32 %6, 10
+; CHECK:                   %4 = call i32 @foo(i32 1)
+; CHECK: BB %16
+; CHECK:                   %6 = load i32, i32* %2, align 4
+; CHECK:                   %7 = icmp slt i32 %6, 10
+; CHECK:                   %4 = call i32 @foo(i32 1)
+; CHECK: BB %13
 ; CHECK:                   %9 = load i32, i32* %2, align 4
 ; CHECK:                   %10 = load i32, i32* %3, align 4
 ; CHECK:                   %11 = load i32, i32* %1, align 4
-; CHECK:                   %12 = add nsw i32 %11, %10  
+; CHECK:                   %12 = add nsw i32 %11, %10
 ; CHECK:                   %6 = load i32, i32* %2, align 4
-; CHECK:                   %7 = icmp slt i32 %6, 10    
-; CHECK:                   %4 = call i32 @foo(i32 1)   
-; CHECK: BB 16                                       
-; CHECK:                   %6 = load i32, i32* %2, align 4
-; CHECK:                   %7 = icmp slt i32 %6, 10    
-; CHECK:                   %4 = call i32 @foo(i32 1)   
+; CHECK:                   %7 = icmp slt i32 %6, 10
+; CHECK:                   %4 = call i32 @foo(i32 1)
 
 ; CHECK-LABEL: 'main':
-; CHECK: BB 2                                        
-; CHECK:                 i32 %0                        
-; CHECK:                 i8** %1                       
+; CHECK: BB %2
+; CHECK:                 i32 %0
+; CHECK:                 i8** %1

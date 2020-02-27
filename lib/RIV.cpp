@@ -104,15 +104,12 @@ bool RIV::runOnFunction(Function &F) {
   return false;
 }
 
-// Some guidance for PassManager:
-//    * addRequired<DominatorTreeWrapperPass>() - needs the results from
-//    Dominator Tree Pass
-//    * setPreservesAll() - does not modify the LLVM program
-//  More info:
-// http://llvm.org/docs/WritingAnLLVMPass.html#specifying-interactions-between-passes
-void RIV::getAnalysisUsage(AnalysisUsage &Info) const {
-  Info.addRequired<DominatorTreeWrapperPass>();
-  Info.setPreservesAll();
+// This method defines how this pass interacts with other passes
+void RIV::getAnalysisUsage(AnalysisUsage &AU) const {
+  // Request the results from Dominator Tree Pass
+  AU.addRequired<DominatorTreeWrapperPass>();
+  // We do not modify the input module
+  AU.setPreservesAll();
 }
 
 RIV::RIVMapTy const &RIV::getRIVMap() const { return RIVMap; }
@@ -129,22 +126,11 @@ void RIV::print(raw_ostream &out, Module const *) const {
 
   const char *EmptyStr = "";
 
-  // Generate a map of RIVs, sorted by BB ids.
-  // TODO Make this more elegant (i.e. avoid creating a separate container)
-  std::map<int, llvm::SmallPtrSet<llvm::Value *, 8>> RIVMapAlt;
-  for (auto const &KvPair : RIVMap) {
+  for (auto const &KV : RIVMap) {
     std::string DummyStr;
     raw_string_ostream BBIdStream(DummyStr);
-    KvPair.first->printAsOperand(BBIdStream, false);
-    // Strip the leading '%' and turn into an int
-    int BBId = stoi(BBIdStream.str().erase(0, 1));
-
-    RIVMapAlt[BBId].insert(KvPair.second.begin(), KvPair.second.end());
-  }
-
-  // Print the results, sorted by BB id
-  for (auto const &KV : RIVMapAlt) {
-    out << format("BB %-6d %-30s\n", KV.first, EmptyStr);
+    KV.first->printAsOperand(BBIdStream, false);
+    out << format("BB %-6s %-30s\n", BBIdStream.str().c_str(), EmptyStr);
     for (auto const &IntegerValue : KV.second) {
       std::string DummyStr;
       raw_string_ostream InstrStr(DummyStr);
